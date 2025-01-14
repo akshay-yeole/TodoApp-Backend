@@ -21,8 +21,4 @@
     <ProjectReference Include="..\TA.ServiceExtensions\TA.ServiceExtensions.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
 </Project>
