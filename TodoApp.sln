@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.Repositories", "TA.Repos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.WebApi", "TA.WebApi\TA.WebApi.csproj", "{CE9F2C98-62CB-41A4-81EF-6183AB5E6758}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TA.ServiceExtensions", "TA.ServiceExtensions\TA.ServiceExtensions.csproj", "{D3376411-7DD8-4C25-8EAE-D814A4D4C064}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{CE9F2C98-62CB-41A4-81EF-6183AB5E6758}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CE9F2C98-62CB-41A4-81EF-6183AB5E6758}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CE9F2C98-62CB-41A4-81EF-6183AB5E6758}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3376411-7DD8-4C25-8EAE-D814A4D4C064}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3376411-7DD8-4C25-8EAE-D814A4D4C064}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3376411-7DD8-4C25-8EAE-D814A4D4C064}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3376411-7DD8-4C25-8EAE-D814A4D4C064}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
