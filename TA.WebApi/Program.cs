@@ -1,12 +1,16 @@
 
 
+using TA.Core.AppExceptions;
 using TA.DataRepository;
 using TA.ServiceExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Business Services
 builder.Services.ConfigureBusinessService();
+
+// Exception Handler
+builder.Services.AddExceptionHandler<AppExceptionHandler>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -17,6 +21,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.ConfigureDb<TodoAppContext>(builder.Configuration);
 
 var app = builder.Build();
+
+//Exception Middleware
+app.UseExceptionHandler(_ => { });
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
