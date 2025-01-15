@@ -21,8 +21,17 @@ namespace TA.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllTodosAsync()
         {
-
             var res = await _todoService.GetAllTodosAsync();
+            return Ok(res);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetTodoByIdAsyc(int id)
+        {
+            var res = await _todoService.GetTodoById(id);
             return Ok(res);
         }
 

@@ -24,6 +24,11 @@ namespace TA.Repositories
             }
             return res;
         }
+        public async Task<Todo> GetTodoById(int id)
+        {
+            var res = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+            return res ?? throw new NotFoundException("No Todos Found");
+        }
 
         public async Task AddTodoAsync(Todo todo)
         {
