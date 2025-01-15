@@ -20,9 +20,20 @@ namespace TA.Repositories
             var res = await _context.Todos.ToListAsync();
             if (res.Count == 0)
             {
-                throw new NotFoundException("No todos found");
+                throw new NotFoundException("No Todos Found");
             }
             return res;
+        }
+
+        public async Task AddTodoAsync(Todo todo)
+        {
+            var res = await _context.Todos.FirstOrDefaultAsync(x => x.Title == todo.Title);
+            if (res != null) {
+                throw new ConflictException("Todo Already Exists");
+            }
+
+            await _context.AddAsync(todo);
+            await _context.SaveChangesAsync();
         }
     }
 }

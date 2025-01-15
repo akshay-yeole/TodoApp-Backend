@@ -17,6 +17,7 @@ namespace TA.Core.AppExceptions
             (int statusCode, string errorMessage) = exception switch
             {
                 NotFoundException notFound => (StatusCodes.Status404NotFound, notFound.Message),
+                ConflictException conflictException => (StatusCodes.Status409Conflict, conflictException.Message),
                 _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };
 

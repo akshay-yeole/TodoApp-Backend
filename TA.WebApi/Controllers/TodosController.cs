@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TA.Contracts;
+using TA.Entities.Models;
 
 namespace TA.WebApi.Controllers
 {
@@ -23,6 +24,16 @@ namespace TA.WebApi.Controllers
 
             var res = await _todoService.GetAllTodosAsync();
             return Ok(res);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddTodoAsync([FromBody] Todo todo)
+        {
+            await _todoService.AddTodoAsync(todo);
+            return NoContent();
         }
     }
 }

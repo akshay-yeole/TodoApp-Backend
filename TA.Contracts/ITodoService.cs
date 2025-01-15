@@ -5,5 +5,6 @@ namespace TA.Contracts
     public interface ITodoService
     {
         Task<IEnumerable<Todo>> GetAllTodosAsync();
+        Task AddTodoAsync(Todo todo);
     }
 }
