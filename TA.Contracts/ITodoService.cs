@@ -7,5 +7,6 @@ namespace TA.Contracts
         Task<IEnumerable<Todo>> GetAllTodosAsync();
         Task AddTodoAsync(Todo todo);
         Task<Todo> GetTodoById(int id);
+        Task DeleteTodoAsync(int id);
     }
 }
