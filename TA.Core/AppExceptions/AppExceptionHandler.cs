@@ -17,11 +17,12 @@ namespace TA.Core.AppExceptions
             (int statusCode, string errorMessage) = exception switch
             {
                 NotFoundException notFound => (StatusCodes.Status404NotFound, notFound.Message),
+                _ => (StatusCodes.Status500InternalServerError, "Internal Server Error")
             };
 
             _logger.LogError(exception, exception.Message);
             httpContext.Response.StatusCode = statusCode;
-            await httpContext.Response.WriteAsJsonAsync(new { message = errorMessage});
+            await httpContext.Response.WriteAsJsonAsync(new { StatusCode = statusCode, Message = errorMessage});
             return true;
         }
     }

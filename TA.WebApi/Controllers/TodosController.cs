@@ -8,9 +8,21 @@ namespace TA.WebApi.Controllers
     public class TodosController : ControllerBase
     {
         private readonly ITodoService _todoService; 
+        
         public TodosController(ITodoService todoService)
         {
             _todoService = todoService;
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetAllTodosAsync()
+        {
+
+            var res = await _todoService.GetAllTodosAsync();
+            return Ok(res);
         }
     }
 }
