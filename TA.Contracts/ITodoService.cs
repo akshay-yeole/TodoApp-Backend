@@ -8,5 +8,6 @@ namespace TA.Contracts
         Task AddTodoAsync(Todo todo);
         Task<Todo> GetTodoById(int id);
         Task DeleteTodoAsync(int id);
+        Task UpdateTodoAsync(int id, Todo todo);
     }
 }

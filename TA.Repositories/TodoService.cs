@@ -41,6 +41,18 @@ namespace TA.Repositories
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateTodoAsync(int id, Todo todo)
+        {
+            var res = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
+            if (res == null)
+            {
+                throw new NotFoundException("No Todos Found");
+            }
+            res.Title = todo.Title;
+            res.IsCompleted = todo.IsCompleted;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteTodoAsync(int id)
         {
             var res = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);

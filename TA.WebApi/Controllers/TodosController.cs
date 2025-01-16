@@ -45,6 +45,16 @@ namespace TA.WebApi.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateTodoAsync(int id, Todo todo)
+        {
+            await _todoService.UpdateTodoAsync(id, todo);
+            return NoContent();
+        }
+
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
