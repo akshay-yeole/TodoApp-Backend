@@ -1,24 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TA.Contracts;
 using TA.Core.AppExceptions;
 using TA.DataRepository;
+using TA.Entities.DTOs;
 using TA.Entities.Models;
 
 namespace TA.Repositories
 {
     public class TodoService : ITodoService
     {
-        private readonly ILogger<TodoService> _loger;
         private readonly TodoAppContext _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<TodoService> _loger;
         
-        public TodoService(TodoAppContext context, ILogger<TodoService> logger)
+        public TodoService(TodoAppContext context, IMapper mapper, ILogger<TodoService> logger)
         {
             _context = context;
+            _mapper = mapper;
             _loger = logger;
         }
 
-        public async Task<IEnumerable<Todo>> GetAllTodosAsync()
+        public async Task<IEnumerable<TodoDTO>> GetAllTodosAsync()
         {
             _loger.LogInformation("Executig Method GetAllTodosAsync()");
             var res = await _context.Todos.ToListAsync();
@@ -26,29 +30,31 @@ namespace TA.Repositories
             {
                 throw new NotFoundException("No Todos Found");
             }
-            return res;
+            var mappedTodos = _mapper.Map<IEnumerable<TodoDTO>>(res);
+            return mappedTodos;
         }
 
-        public async Task<Todo> GetTodoById(int id)
+        public async Task<TodoDTO> GetTodoById(int id)
         {
             _loger.LogInformation("Executing Method GetAllTodosAsync()");
             var res = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
-            return res ?? throw new NotFoundException("No Todos Found");
+            var mappedTodo = _mapper.Map<TodoDTO>(res);
+            return mappedTodo ?? throw new NotFoundException("No Todos Found");
         }
 
-        public async Task AddTodoAsync(Todo todo)
+        public async Task AddTodoAsync(TodoDTO todo)
         {
             _loger.LogInformation("Executing Method AddTodoAsync()");
             var res = await _context.Todos.FirstOrDefaultAsync(x => x.Title == todo.Title);
             if (res != null) {
                 throw new ConflictException("Todo Already Exists");
             }
-
-            await _context.AddAsync(todo);
+            var mappedTodo = _mapper.Map<Todo>(todo);
+            await _context.AddAsync(mappedTodo);
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdateTodoAsync(int id, Todo todo)
+        public async Task UpdateTodoAsync(int id, TodoDTO todo)
         {
             _loger.LogInformation("Executing Method UpdateTodoAsync()");
             var res = await _context.Todos.FirstOrDefaultAsync(x => x.Id == id);
@@ -56,8 +62,9 @@ namespace TA.Repositories
             {
                 throw new NotFoundException("No Todos Found");
             }
-            res.Title = todo.Title;
-            res.IsCompleted = todo.IsCompleted;
+            var mappedTodo = _mapper.Map<Todo>(todo);
+            res.Title = mappedTodo.Title;
+            res.IsCompleted = mappedTodo.IsCompleted;
             await _context.SaveChangesAsync();
         }
 

@@ -1,8 +1,7 @@
-﻿namespace TA.Entities.Models
+﻿namespace TA.Entities.DTOs
 {
-    public class Todo : BaseEntity
+    public class TodoDTO
     {
-        public int Id { get; set; }
         public string Title { get; set; } = string.Empty;
         public bool IsCompleted { get; set; }
     }
