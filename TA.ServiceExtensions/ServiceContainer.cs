@@ -14,9 +14,9 @@ namespace TA.ServiceExtensions
         {
             services.AddDbContext<TContext>(options =>
             {
-            options.UseSqlServer(
-                configuration.GetConnectionString("Default"), 
-                x => x.MigrationsAssembly("TA.WebApi"));
+                options.UseSqlServer(
+                    configuration.GetConnectionString("Default"),
+                    x => x.MigrationsAssembly("TA.WebApi"));
             });
         }
 
@@ -24,6 +24,20 @@ namespace TA.ServiceExtensions
         public static void ConfigureBusinessService(this IServiceCollection services)
         {
             services.AddScoped<ITodoService, TodoService>();
+        }
+
+        //Configure CORS
+        public static void ConfigureCors(this IServiceCollection services)
+        {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AllowOrigin", builder =>
+                {
+                    builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
         }
     }
 }

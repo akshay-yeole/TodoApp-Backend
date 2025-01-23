@@ -6,28 +6,21 @@ using TA.ServiceExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Business Services
 builder.Services.ConfigureBusinessService();
-
-// Exception Handler
 builder.Services.AddExceptionHandler<AppExceptionHandler>();
-
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.ConfigureCors();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Configurations
 builder.Services.ConfigureDb<TodoAppContext>(builder.Configuration);
 
 var app = builder.Build();
 
-//Exception Middleware
 app.UseExceptionHandler(_ => { });
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -35,6 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowOrigin");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
