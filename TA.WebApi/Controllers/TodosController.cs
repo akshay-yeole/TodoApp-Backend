@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TA.Contracts;
 using TA.Entities.DTOs;
 
@@ -17,6 +18,7 @@ namespace TA.WebApi.Controllers
             _logger = logger;
         }
 
+        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TodoDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
