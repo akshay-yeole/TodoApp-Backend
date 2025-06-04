@@ -5,6 +5,7 @@ using TA.Entities.DTOs;
 
 namespace TA.WebApi.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class TodosController : ControllerBase
@@ -18,7 +19,6 @@ namespace TA.WebApi.Controllers
             _logger = logger;
         }
 
-        [Authorize]
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(IEnumerable<TodoDTO>))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -56,7 +56,7 @@ namespace TA.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateTodoAsync(int id, TodoDTO todo)
+        public async Task<IActionResult> UpdateTodoAsync(int id,[FromBody] TodoDTO todo)
         {
             _logger.LogInformation("Executing Endpoint UpdateTodoAsync()");;
             await _todoService.UpdateTodoAsync(id, todo);
