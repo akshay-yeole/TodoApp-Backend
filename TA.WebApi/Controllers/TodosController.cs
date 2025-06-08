@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using LazyCache;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using TA.Contracts;
+using TA.Core.CacheConfiguration;
 using TA.Entities.DTOs;
 
 namespace TA.WebApi.Controllers
@@ -12,10 +15,12 @@ namespace TA.WebApi.Controllers
     {
         private readonly ITodoService _todoService;
         private readonly ILogger<TodosController> _logger;
+        private ICacheProvider _cacheProvider;
 
-        public TodosController(ITodoService todoService, ILogger<TodosController> logger)
+        public TodosController(ITodoService todoService, ICacheProvider cacheProvider, ILogger<TodosController> logger)
         {
             _todoService = todoService;
+            _cacheProvider = cacheProvider;
             _logger = logger;
         }
 
@@ -26,8 +31,19 @@ namespace TA.WebApi.Controllers
         public async Task<IActionResult> GetAllTodosAsync()
         {
             _logger.LogInformation("Executing Endpoint GetAllTodosAsync()");
-            var res = await _todoService.GetAllTodosAsync();
-            return Ok(res);
+
+            if (!_cacheProvider.TryGetValue(CacheKeys.Todos, out IEnumerable<TodoDTO> todos))
+            {
+                todos = await _todoService.GetAllTodosAsync();
+                var cacheEntryOptions = new MemoryCacheEntryOptions
+                {
+                    AbsoluteExpiration = CacheConfiguration.AbsoluteExpiration,
+                    SlidingExpiration = CacheConfiguration.SlidingExpiration, 
+                    Size = CacheConfiguration.MaxCacheSize
+                };
+                _cacheProvider.Set(CacheKeys.Todos, todos, cacheEntryOptions);
+            }
+            return Ok(todos);
         }
 
         [HttpGet("{id}")]
@@ -56,9 +72,9 @@ namespace TA.WebApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UpdateTodoAsync(int id,[FromBody] TodoDTO todo)
+        public async Task<IActionResult> UpdateTodoAsync(int id, [FromBody] TodoDTO todo)
         {
-            _logger.LogInformation("Executing Endpoint UpdateTodoAsync()");;
+            _logger.LogInformation("Executing Endpoint UpdateTodoAsync()"); ;
             await _todoService.UpdateTodoAsync(id, todo);
             return NoContent();
         }
